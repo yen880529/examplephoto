@@ -126,11 +126,50 @@ h2 {
 }
 
 .search-box button {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
   padding: 0 18px;
-  color: #fff;
-  background: var(--blue);
+  border-left: 2px solid #1faae6;
+  color: #1faae6;
+  background: transparent;
   font-weight: 800;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.3s ease, transform 120ms ease;
+}
+
+.search-box button::before {
+  content: "";
+  width: 0;
+  height: 500%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  display: block;
+  background: #1faae6;
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: width 0.5s ease;
+}
+
+.search-box button:hover::before,
+.search-box button:active::before {
+  width: 100%;
+}
+
+.search-box button:hover {
+  color: #fff;
+}
+
+.search-box button:active {
+  transform: scale(0.96);
+  color: #fff;
+}
+
+.search-box button:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.92);
+  outline-offset: -5px;
 }
 
 .search-results {
@@ -213,22 +252,57 @@ h2 {
 }
 
 .feature-card {
+  --button-color: #1faae6;
   display: grid;
   grid-template-columns: 56px 1fr 32px;
   gap: 14px;
   align-items: center;
   min-height: 92px;
   padding: 16px;
-  border: 1px solid rgba(220, 228, 238, 0.9);
+  border: 2px solid var(--button-color);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.88);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background: transparent;
   box-shadow: var(--shadow);
+  color: var(--button-color);
   -webkit-tap-highlight-color: transparent;
-  transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+  transition: color 0.3s ease, transform 120ms ease, box-shadow 150ms ease;
+}
+
+.feature-card::before {
+  content: "";
+  width: 0;
+  height: 500%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  display: block;
+  background: var(--button-color);
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: width 0.5s ease;
+}
+
+.feature-card:hover::before,
+.feature-card:active::before {
+  width: 100%;
+}
+
+.feature-card:hover {
+  color: #fff;
 }
 
 .feature-card:active {
-  transform: scale(0.985);
+  transform: scale(0.97);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(31, 48, 78, 0.16);
+}
+
+.feature-card:focus-visible {
+  outline: 3px solid rgba(41, 105, 216, 0.36);
+  outline-offset: 3px;
 }
 
 .card-icon {
@@ -237,25 +311,28 @@ h2 {
   display: grid;
   place-items: center;
   border-radius: var(--radius);
-  color: #fff;
+  border: 2px solid currentColor;
+  color: inherit;
+  background: transparent;
   font-size: 23px;
   font-weight: 850;
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
 
-.tone-gold .card-icon {
-  background: linear-gradient(135deg, #e0a03b, var(--gold));
+.tone-gold {
+  --button-color: #d88924;
 }
 
-.tone-blue .card-icon {
-  background: linear-gradient(135deg, #6192ed, var(--blue));
+.tone-blue {
+  --button-color: #1faae6;
 }
 
-.tone-green .card-icon {
-  background: linear-gradient(135deg, #4fac8f, var(--green));
+.tone-green {
+  --button-color: #1abc9c;
 }
 
-.tone-red .card-icon {
-  background: linear-gradient(135deg, #d37373, var(--red));
+.tone-red {
+  --button-color: #ff386d;
 }
 
 .card-body {
@@ -264,24 +341,60 @@ h2 {
 
 .card-title {
   display: block;
-  color: var(--text);
+  color: inherit;
   font-size: 20px;
   font-weight: 750;
   line-height: 1.25;
+  transition: color 0.3s ease;
 }
 
 .card-meta {
   display: block;
   margin-top: 6px;
-  color: var(--muted);
+  color: inherit;
   font-size: 14px;
+  opacity: 0.78;
+  transition: color 0.3s ease, opacity 0.3s ease;
 }
 
 .card-arrow {
-  color: var(--muted);
+  color: inherit;
   font-size: 30px;
   line-height: 1;
   text-align: right;
+  transition: transform 150ms ease, color 150ms ease;
+}
+
+.feature-card:hover .card-arrow,
+.feature-card:focus-visible .card-arrow {
+  color: inherit;
+  transform: translateX(3px);
+}
+
+.feature-card:active .card-arrow {
+  transform: translateX(1px) scale(0.92);
+}
+
+@media (hover: none) {
+  .feature-card:hover {
+    transform: none;
+    color: var(--button-color);
+    background: transparent;
+    box-shadow: var(--shadow);
+  }
+
+  .feature-card:hover::before {
+    width: 0;
+  }
+
+  .feature-card:active {
+    transform: scale(0.97);
+    color: #fff;
+  }
+
+  .feature-card:active::before {
+    width: 100%;
+  }
 }
 
 .topbar {
