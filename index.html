@@ -81,10 +81,20 @@
     const searchResults = document.querySelector("#search-results");
     const navigationDelay = 500;
 
-    function goAfterAnimation(path, activeElement) {
+    function setActivating(activeElement) {
       if (activeElement) {
         activeElement.classList.add("is-activating");
       }
+    }
+
+    function clearActivating() {
+      document.querySelectorAll(".is-activating").forEach((element) => {
+        element.classList.remove("is-activating");
+      });
+    }
+
+    function goAfterAnimation(path, activeElement) {
+      setActivating(activeElement);
 
       window.setTimeout(() => {
         window.location.href = path;
@@ -124,6 +134,11 @@
       renderResults(getMatches(searchInput.value), searchInput.value);
     });
 
+    document.addEventListener("pointerdown", (event) => {
+      const activeElement = event.target.closest(".feature-card, .search-result, .search-box button");
+      setActivating(activeElement);
+    });
+
     searchForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const matches = getMatches(searchInput.value);
@@ -139,6 +154,8 @@
       event.preventDefault();
       goAfterAnimation(link.href, link);
     });
+
+    window.addEventListener("pageshow", clearActivating);
   </script>
 </body>
 </html>
