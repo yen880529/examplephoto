@@ -81,7 +81,11 @@
     const searchResults = document.querySelector("#search-results");
     const navigationDelay = 500;
 
-    function goAfterAnimation(path) {
+    function goAfterAnimation(path, activeElement) {
+      if (activeElement) {
+        activeElement.classList.add("is-activating");
+      }
+
       window.setTimeout(() => {
         window.location.href = path;
       }, navigationDelay);
@@ -124,7 +128,7 @@
       event.preventDefault();
       const matches = getMatches(searchInput.value);
       if (matches.length > 0) {
-        goAfterAnimation(matches[0].path);
+        goAfterAnimation(matches[0].path, searchForm.querySelector("button"));
       }
     });
 
@@ -133,7 +137,7 @@
       if (!link) return;
 
       event.preventDefault();
-      goAfterAnimation(link.href);
+      goAfterAnimation(link.href, link);
     });
   </script>
 </body>

@@ -162,6 +162,14 @@ h2 {
   color: #fff;
 }
 
+.search-box button.is-activating {
+  color: #fff;
+}
+
+.search-box button.is-activating::before {
+  width: 150%;
+}
+
 .search-box button:active {
   transform: scale(0.96);
   color: #fff;
@@ -294,6 +302,15 @@ h2 {
   color: #fff;
 }
 
+.feature-card.is-activating {
+  color: #fff;
+  transform: scale(0.97);
+}
+
+.feature-card.is-activating::before {
+  width: 150%;
+}
+
 .feature-card:active {
   transform: scale(0.97);
   color: #fff;
@@ -393,7 +410,7 @@ h2 {
   }
 
   .feature-card:active::before {
-    width: 100%;
+    width: 150%;
   }
 }
 
