@@ -79,6 +79,13 @@
     const searchForm = document.querySelector(".search-panel");
     const searchInput = document.querySelector("#folder-search");
     const searchResults = document.querySelector("#search-results");
+    const navigationDelay = 500;
+
+    function goAfterAnimation(path) {
+      window.setTimeout(() => {
+        window.location.href = path;
+      }, navigationDelay);
+    }
 
     function getMatches(query) {
       const keyword = query.trim().toLowerCase();
@@ -117,8 +124,16 @@
       event.preventDefault();
       const matches = getMatches(searchInput.value);
       if (matches.length > 0) {
-        window.location.href = matches[0].path;
+        goAfterAnimation(matches[0].path);
       }
+    });
+
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest(".feature-card, .search-result");
+      if (!link) return;
+
+      event.preventDefault();
+      goAfterAnimation(link.href);
     });
   </script>
 </body>

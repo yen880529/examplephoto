@@ -155,7 +155,7 @@ h2 {
 
 .search-box button:hover::before,
 .search-box button:active::before {
-  width: 100%;
+  width: 150%;
 }
 
 .search-box button:hover {
@@ -287,7 +287,7 @@ h2 {
 
 .feature-card:hover::before,
 .feature-card:active::before {
-  width: 100%;
+  width: 150%;
 }
 
 .feature-card:hover {
@@ -503,10 +503,17 @@ h2 {
 
   .search-box {
     grid-template-columns: 1fr;
+    min-height: 112px;
+  }
+
+  .search-box input {
+    min-height: 56px;
+    font-size: 20px;
   }
 
   .search-box button {
-    min-height: 42px;
+    min-height: 56px;
+    font-size: 20px;
   }
 
   .search-result {
