@@ -126,53 +126,22 @@ h2 {
 }
 
 .search-box button {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
   padding: 0 18px;
-  border-left: 2px solid #1faae6;
-  color: #1faae6;
-  background: transparent;
+  color: #fff;
+  background: #1faae6;
   font-weight: 800;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: color 0.3s ease, transform 120ms ease;
-}
-
-.search-box button::before {
-  content: "";
-  width: 0;
-  height: 500%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: -1;
-  display: block;
-  background: #1faae6;
-  transform: translate(-50%, -50%) rotate(45deg);
-  transition: width 0.5s ease;
-}
-
-.search-box button:hover::before,
-.search-box button:active::before {
-  width: 250%;
+  transition: background-color 150ms ease, transform 120ms ease;
 }
 
 .search-box button:hover {
-  color: #fff;
-}
-
-.search-box button.is-activating {
-  color: #fff;
-}
-
-.search-box button.is-activating::before {
-  width: 250%;
+  background: #168fca;
 }
 
 .search-box button:active {
   transform: scale(0.96);
-  color: #fff;
+  background: #0f7fb8;
 }
 
 .search-box button:focus-visible {
@@ -261,60 +230,60 @@ h2 {
 
 .feature-card {
   --button-color: #1faae6;
+  --button-glow: rgba(31, 170, 230, 0.5);
   display: grid;
   grid-template-columns: 56px 1fr 32px;
   gap: 14px;
   align-items: center;
   min-height: 92px;
   padding: 16px;
-  border: 2px solid var(--button-color);
-  border-radius: var(--radius);
+  border: 0;
+  border-radius: 5px;
+  outline: 2px solid var(--button-color);
   position: relative;
   z-index: 1;
   overflow: hidden;
   background: transparent;
   box-shadow: var(--shadow);
   color: var(--button-color);
+  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: color 0.3s ease, transform 120ms ease, box-shadow 150ms ease;
+  transition: color 420ms ease, transform 180ms ease, outline-color 420ms ease, box-shadow 420ms ease;
+}
+
+.feature-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .feature-card::before {
   content: "";
-  width: 0;
-  height: 500%;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: -1;
-  display: block;
+  left: -50px;
+  top: 0;
+  z-index: 0;
+  width: 0;
+  height: 100%;
   background: var(--button-color);
-  transform: translate(-50%, -50%) rotate(45deg);
-  transition: width 0.5s ease;
+  transform: skewX(45deg);
+  transition: width 420ms ease;
 }
 
-.feature-card:hover::before,
-.feature-card:active::before {
-  width: 250%;
-}
-
-.feature-card:hover {
-  color: #fff;
-}
-
-.feature-card.is-activating {
-  color: #fff;
-  transform: scale(0.97);
-}
-
+.feature-card.is-pressing::before,
 .feature-card.is-activating::before {
   width: 250%;
 }
 
-.feature-card:active {
-  transform: scale(0.97);
+.feature-card.is-pressing,
+.feature-card.is-activating {
   color: #fff;
-  box-shadow: 0 8px 18px rgba(31, 48, 78, 0.16);
+  transform: scale(1.03);
+  outline-color: rgba(255, 255, 255, 0.92);
+  box-shadow: 4px 5px 17px -4px var(--button-glow);
+}
+
+.feature-card:active {
+  transform: scale(0.98);
 }
 
 .feature-card:focus-visible {
@@ -338,18 +307,22 @@ h2 {
 
 .tone-gold {
   --button-color: #d88924;
+  --button-glow: rgba(216, 137, 36, 0.52);
 }
 
 .tone-blue {
   --button-color: #1faae6;
+  --button-glow: rgba(31, 170, 230, 0.5);
 }
 
 .tone-green {
   --button-color: #1abc9c;
+  --button-glow: rgba(26, 188, 156, 0.5);
 }
 
 .tone-red {
   --button-color: #ff386d;
+  --button-glow: rgba(255, 56, 109, 0.5);
 }
 
 .card-body {
@@ -382,7 +355,8 @@ h2 {
   transition: transform 150ms ease, color 150ms ease;
 }
 
-.feature-card:hover .card-arrow,
+.feature-card.is-pressing .card-arrow,
+.feature-card.is-activating .card-arrow,
 .feature-card:focus-visible .card-arrow {
   color: inherit;
   transform: translateX(3px);
@@ -392,34 +366,21 @@ h2 {
   transform: translateX(1px) scale(0.92);
 }
 
-@media (hover: none) {
+@media (hover: hover) and (pointer: fine) {
   .feature-card:hover {
-    transform: none;
-    color: var(--button-color);
-    background: transparent;
-    box-shadow: var(--shadow);
+    color: #fff;
+    transform: scale(1.03);
+    outline-color: rgba(255, 255, 255, 0.92);
+    box-shadow: 4px 5px 17px -4px var(--button-glow);
   }
 
   .feature-card:hover::before {
-    width: 0;
-  }
-
-  .feature-card:active {
-    transform: scale(0.97);
-    color: #fff;
-  }
-
-  .feature-card:active::before {
     width: 250%;
   }
 
-  .feature-card.is-activating {
-    color: #fff;
-    transform: scale(0.97);
-  }
-
-  .feature-card.is-activating::before {
-    width: 250%;
+  .feature-card:hover .card-arrow {
+    color: inherit;
+    transform: translateX(3px);
   }
 }
 

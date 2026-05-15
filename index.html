@@ -11,9 +11,8 @@
     <div class="wrap hero-inner">
       <div>
         <p class="eyebrow">Measurement Library</p>
-        <h1>資料夾目錄</h1>
+        <h1>範例目錄</h1>
         <form class="search-panel" role="search" aria-label="搜尋資料夾">
-          <label class="search-label" for="folder-search">搜尋資料夾或細部資料夾</label>
           <div class="search-box">
             <input id="folder-search" type="search" placeholder="輸入 ACF、CP、MMF、桶身..." autocomplete="off">
             <button type="submit">搜尋</button>
@@ -80,15 +79,24 @@
     const searchInput = document.querySelector("#folder-search");
     const searchResults = document.querySelector("#search-results");
     const navigationDelay = 500;
+    const interactiveSelector = ".feature-card, .search-result";
+
+    function setPressing(activeElement) {
+      if (activeElement) {
+        activeElement.classList.add("is-pressing");
+      }
+    }
 
     function setActivating(activeElement) {
       if (activeElement) {
+        activeElement.classList.remove("is-pressing");
         activeElement.classList.add("is-activating");
       }
     }
 
-    function clearActivating() {
-      document.querySelectorAll(".is-activating").forEach((element) => {
+    function clearInteractionState() {
+      document.querySelectorAll(".is-pressing, .is-activating").forEach((element) => {
+        element.classList.remove("is-pressing");
         element.classList.remove("is-activating");
       });
     }
@@ -135,15 +143,34 @@
     });
 
     document.addEventListener("pointerdown", (event) => {
-      const activeElement = event.target.closest(".feature-card, .search-result, .search-box button");
-      setActivating(activeElement);
+      const activeElement = event.target.closest(interactiveSelector);
+      setPressing(activeElement);
+    });
+
+    document.addEventListener("pointerup", (event) => {
+      const activeElement = event.target.closest(interactiveSelector);
+      if (activeElement) {
+        window.setTimeout(() => {
+          if (!activeElement.classList.contains("is-activating")) {
+            activeElement.classList.remove("is-pressing");
+          }
+        }, 80);
+      }
+    });
+
+    document.addEventListener("pointercancel", clearInteractionState);
+    document.addEventListener("pointerleave", (event) => {
+      const activeElement = event.target.closest(interactiveSelector);
+      if (activeElement && !activeElement.classList.contains("is-activating")) {
+        activeElement.classList.remove("is-pressing");
+      }
     });
 
     searchForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const matches = getMatches(searchInput.value);
       if (matches.length > 0) {
-        goAfterAnimation(matches[0].path, searchForm.querySelector("button"));
+        goAfterAnimation(matches[0].path);
       }
     });
 
@@ -155,7 +182,7 @@
       goAfterAnimation(link.href, link);
     });
 
-    window.addEventListener("pageshow", clearActivating);
+    window.addEventListener("pageshow", clearInteractionState);
   </script>
 </body>
 </html>
