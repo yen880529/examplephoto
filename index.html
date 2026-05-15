@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>量測方法</title>
+  <title>資料夾目錄</title>
   <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
@@ -11,9 +11,17 @@
     <div class="wrap hero-inner">
       <div>
         <p class="eyebrow">Measurement Library</p>
-        <h1>量測方法</h1>
+        <h1>資料夾目錄</h1>
+        <form class="search-panel" role="search" aria-label="搜尋資料夾">
+          <label class="search-label" for="folder-search">搜尋資料夾或細部資料夾</label>
+          <div class="search-box">
+            <input id="folder-search" type="search" placeholder="輸入 ACF、CP、MMF、桶身..." autocomplete="off">
+            <button type="submit">搜尋</button>
+          </div>
+          <div class="search-results" id="search-results" aria-live="polite"></div>
+        </form>
       </div>
-      <div class="stat-panel" aria-label="資料夾統計">
+      <div class="stat-panel" aria-label="資料夾數量">
         <span class="stat-number">3</span>
         <span class="stat-label">資料夾</span>
       </div>
@@ -28,12 +36,12 @@
       </div>
     </section>
 
-    <section class="card-grid" aria-label="資料夾列表">
+    <section class="card-grid" aria-label="資料夾清單">
       <a class="feature-card tone-gold" href="ACF/">
         <span class="card-icon" aria-hidden="true">A</span>
         <span class="card-body">
           <span class="card-title">ACF</span>
-          <span class="card-meta">目前沒有項目</span>
+          <span class="card-meta">主要資料夾</span>
         </span>
         <span class="card-arrow" aria-hidden="true">›</span>
       </a>
@@ -42,7 +50,7 @@
         <span class="card-icon" aria-hidden="true">C</span>
         <span class="card-body">
           <span class="card-title">CP</span>
-          <span class="card-meta">目前沒有項目</span>
+          <span class="card-meta">主要資料夾</span>
         </span>
         <span class="card-arrow" aria-hidden="true">›</span>
       </a>
@@ -51,11 +59,67 @@
         <span class="card-icon" aria-hidden="true">M</span>
         <span class="card-body">
           <span class="card-title">MMF</span>
-          <span class="card-meta">3 個子資料夾</span>
+          <span class="card-meta">3 個細部資料夾</span>
         </span>
         <span class="card-arrow" aria-hidden="true">›</span>
       </a>
     </section>
   </main>
+
+  <script>
+    const folders = [
+      { name: "ACF", path: "ACF/", detail: "主要資料夾" },
+      { name: "CP", path: "CP/", detail: "主要資料夾" },
+      { name: "MMF", path: "MMF/", detail: "主要資料夾" },
+      { name: "MMF / 上端放樣", path: "MMF/上端放樣/", detail: "細部資料夾" },
+      { name: "MMF / 上端組裝", path: "MMF/上端組裝/", detail: "細部資料夾" },
+      { name: "MMF / 桶身", path: "MMF/桶身/", detail: "細部資料夾" }
+    ];
+
+    const searchForm = document.querySelector(".search-panel");
+    const searchInput = document.querySelector("#folder-search");
+    const searchResults = document.querySelector("#search-results");
+
+    function getMatches(query) {
+      const keyword = query.trim().toLowerCase();
+      if (!keyword) return [];
+
+      return folders.filter((folder) =>
+        folder.name.toLowerCase().includes(keyword) ||
+        folder.path.toLowerCase().includes(keyword)
+      );
+    }
+
+    function renderResults(matches, query) {
+      if (!query.trim()) {
+        searchResults.innerHTML = "";
+        return;
+      }
+
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<p class="search-empty">找不到符合的資料夾</p>';
+        return;
+      }
+
+      searchResults.innerHTML = matches.map((folder) => `
+        <a class="search-result" href="${folder.path}">
+          <span>${folder.name}</span>
+          <small>${folder.detail}</small>
+        </a>
+      `).join("");
+    }
+
+    searchInput.addEventListener("input", () => {
+      renderResults(getMatches(searchInput.value), searchInput.value);
+    });
+
+    searchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const matches = getMatches(searchInput.value);
+      if (matches.length > 0) {
+        window.location.href = matches[0].path;
+      }
+    });
+  </script>
 </body>
 </html>
