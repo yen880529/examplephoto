@@ -107,7 +107,7 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 14px 32px rgba(10, 18, 32, 0.18);
+  box-shadow: 0 14px 32px rgba(10, 18, 32, 0.12);
 }
 
 .search-box input,
@@ -128,20 +128,21 @@ h2 {
 .search-box button {
   padding: 0 18px;
   color: #fff;
-  background: #1faae6;
-  font-weight: 800;
+  background: var(--blue);
+  font-weight: 700;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background-color 150ms ease, transform 120ms ease;
 }
 
-.search-box button:hover {
-  background: #168fca;
+.search-box button:hover,
+.search-box button:focus-visible {
+  background: #1a90d2;
 }
 
 .search-box button:active {
-  transform: scale(0.96);
-  background: #0f7fb8;
+  transform: scale(0.98);
+  background: #1677b9;
 }
 
 .search-box button:focus-visible {
@@ -230,56 +231,84 @@ h2 {
 
 .feature-card {
   --button-color: #1faae6;
-  --button-glow: rgba(31, 170, 230, 0.5);
   display: grid;
   grid-template-columns: 56px 1fr 32px;
   gap: 14px;
   align-items: center;
   min-height: 92px;
   padding: 16px;
-  border: 0;
+  border: 1px solid rgba(220, 228, 238, 0.92);
   border-radius: 5px;
-  outline: 2px solid var(--button-color);
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  background: transparent;
-  box-shadow: var(--shadow);
-  color: var(--button-color);
+  background: var(--surface);
+  box-shadow: 0 10px 24px rgba(31, 48, 78, 0.08);
+  color: var(--text);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: color 420ms ease, transform 180ms ease, outline-color 420ms ease, box-shadow 420ms ease;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
 }
 
-.feature-card > * {
-  position: relative;
-  z-index: 1;
+.card-icon {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  border: 2px solid var(--button-color);
+  color: var(--button-color);
+  background: rgba(31, 170, 230, 0.08);
+  font-size: 23px;
+  font-weight: 850;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
 }
 
-.feature-card::before {
-  content: "";
-  position: absolute;
-  left: -50px;
-  top: 0;
-  z-index: 0;
-  width: 0;
-  height: 100%;
-  background: var(--button-color);
-  transform: skewX(45deg);
-  transition: width 420ms ease;
+.tone-gold {
+  --button-color: #d88924;
 }
 
-.feature-card.is-pressing::before,
-.feature-card.is-activating::before {
-  width: 250%;
+.tone-blue {
+  --button-color: #1faae6;
+}
+
+.tone-green {
+  --button-color: #1abc9c;
+}
+
+.tone-red {
+  --button-color: #ff386d;
+}
+
+.card-body {
+  min-width: 0;
+}
+
+.card-title {
+  display: block;
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.card-meta {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.card-arrow {
+  color: var(--text);
+  font-size: 30px;
+  line-height: 1;
+  text-align: right;
+  transition: transform 120ms ease;
 }
 
 .feature-card.is-pressing,
-.feature-card.is-activating {
-  color: #fff;
-  transform: scale(1.03);
-  outline-color: rgba(255, 255, 255, 0.92);
-  box-shadow: 4px 5px 17px -4px var(--button-glow);
+.feature-card.is-activating,
+.feature-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(31, 48, 78, 0.12);
 }
 
 .feature-card:active {
@@ -291,97 +320,14 @@ h2 {
   outline-offset: 3px;
 }
 
-.card-icon {
-  width: 56px;
-  height: 56px;
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius);
-  border: 2px solid currentColor;
-  color: inherit;
-  background: transparent;
-  font-size: 23px;
-  font-weight: 850;
-  transition: border-color 0.3s ease, color 0.3s ease;
-}
-
-.tone-gold {
-  --button-color: #d88924;
-  --button-glow: rgba(216, 137, 36, 0.52);
-}
-
-.tone-blue {
-  --button-color: #1faae6;
-  --button-glow: rgba(31, 170, 230, 0.5);
-}
-
-.tone-green {
-  --button-color: #1abc9c;
-  --button-glow: rgba(26, 188, 156, 0.5);
-}
-
-.tone-red {
-  --button-color: #ff386d;
-  --button-glow: rgba(255, 56, 109, 0.5);
-}
-
-.card-body {
-  min-width: 0;
-}
-
-.card-title {
-  display: block;
-  color: inherit;
-  font-size: 20px;
-  font-weight: 750;
-  line-height: 1.25;
-  transition: color 0.3s ease;
-}
-
-.card-meta {
-  display: block;
-  margin-top: 6px;
-  color: inherit;
-  font-size: 14px;
-  opacity: 0.78;
-  transition: color 0.3s ease, opacity 0.3s ease;
-}
-
-.card-arrow {
-  color: inherit;
-  font-size: 30px;
-  line-height: 1;
-  text-align: right;
-  transition: transform 150ms ease, color 150ms ease;
-}
-
 .feature-card.is-pressing .card-arrow,
 .feature-card.is-activating .card-arrow,
-.feature-card:focus-visible .card-arrow {
-  color: inherit;
+.feature-card:hover .card-arrow {
   transform: translateX(3px);
 }
 
 .feature-card:active .card-arrow {
   transform: translateX(1px) scale(0.92);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .feature-card:hover {
-    color: #fff;
-    transform: scale(1.03);
-    outline-color: rgba(255, 255, 255, 0.92);
-    box-shadow: 4px 5px 17px -4px var(--button-glow);
-  }
-
-  .feature-card:hover::before {
-    width: 250%;
-  }
-
-  .feature-card:hover .card-arrow {
-    color: inherit;
-    transform: translateX(3px);
-  }
 }
 
 .topbar {

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>資料夾目錄</title>
-  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
   <header class="hero">
@@ -21,7 +21,7 @@
         </form>
       </div>
       <div class="stat-panel" aria-label="資料夾數量">
-        <span class="stat-number">3</span>
+        <span class="stat-number" id="folder-count">0</span>
         <span class="stat-label">資料夾</span>
       </div>
     </div>
@@ -35,79 +35,17 @@
       </div>
     </section>
 
-    <section class="card-grid" aria-label="資料夾清單">
-      <a class="feature-card tone-gold" href="ACF/">
-        <span class="card-icon" aria-hidden="true">A</span>
-        <span class="card-body">
-          <span class="card-title">ACF</span>
-          <span class="card-meta">主要資料夾</span>
-        </span>
-        <span class="card-arrow" aria-hidden="true">›</span>
-      </a>
-
-      <a class="feature-card tone-blue" href="CP/">
-        <span class="card-icon" aria-hidden="true">C</span>
-        <span class="card-body">
-          <span class="card-title">CP</span>
-          <span class="card-meta">主要資料夾</span>
-        </span>
-        <span class="card-arrow" aria-hidden="true">›</span>
-      </a>
-
-      <a class="feature-card tone-green" href="MMF/">
-        <span class="card-icon" aria-hidden="true">M</span>
-        <span class="card-body">
-          <span class="card-title">MMF</span>
-          <span class="card-meta">3 個細部資料夾</span>
-        </span>
-        <span class="card-arrow" aria-hidden="true">›</span>
-      </a>
-    </section>
+    <section id="folder-cards" class="card-grid" aria-label="資料夾清單"></section>
   </main>
 
+  <script src="/data/folders.js"></script>
+  <script src="/assets/site.js"></script>
   <script>
-    const folders = [
-      { name: "ACF", path: "ACF/", detail: "主要資料夾" },
-      { name: "CP", path: "CP/", detail: "主要資料夾" },
-      { name: "MMF", path: "MMF/", detail: "主要資料夾" },
-      { name: "MMF / 上端放樣", path: "MMF/上端放樣/", detail: "細部資料夾" },
-      { name: "MMF / 上端組裝", path: "MMF/上端組裝/", detail: "細部資料夾" },
-      { name: "MMF / 桶身", path: "MMF/桶身/", detail: "細部資料夾" }
-    ];
-
     const searchForm = document.querySelector(".search-panel");
     const searchInput = document.querySelector("#folder-search");
     const searchResults = document.querySelector("#search-results");
-    const navigationDelay = 500;
-    const interactiveSelector = ".feature-card, .search-result";
-
-    function setPressing(activeElement) {
-      if (activeElement) {
-        activeElement.classList.add("is-pressing");
-      }
-    }
-
-    function setActivating(activeElement) {
-      if (activeElement) {
-        activeElement.classList.remove("is-pressing");
-        activeElement.classList.add("is-activating");
-      }
-    }
-
-    function clearInteractionState() {
-      document.querySelectorAll(".is-pressing, .is-activating").forEach((element) => {
-        element.classList.remove("is-pressing");
-        element.classList.remove("is-activating");
-      });
-    }
-
-    function goAfterAnimation(path, activeElement) {
-      setActivating(activeElement);
-
-      window.setTimeout(() => {
-        window.location.href = path;
-      }, navigationDelay);
-    }
+    const folderCards = document.querySelector("#folder-cards");
+    const folderCount = document.querySelector("#folder-count");
 
     function getMatches(query) {
       const keyword = query.trim().toLowerCase();
@@ -138,51 +76,51 @@
       `).join("");
     }
 
+    function isRootFolder(folder) {
+      return folder.path.split("/").filter(Boolean).length === 1;
+    }
+
+    function getChildFolderCount(folder) {
+      return folders.filter((item) => item.path.startsWith(folder.path) && item.path !== folder.path).length;
+    }
+
+    function renderCards() {
+      const rootFolders = folders.filter(isRootFolder);
+      folderCount.textContent = rootFolders.length;
+
+      const toneClasses = ["tone-gold", "tone-blue", "tone-green", "tone-cyan", "tone-magenta"];
+      folderCards.innerHTML = rootFolders.map((folder, index) => {
+        const childCount = getChildFolderCount(folder);
+        const detail = childCount > 0 ? `${childCount} 個細部資料夾` : folder.detail;
+        const tone = toneClasses[index % toneClasses.length];
+        const icon = folder.name.charAt(0);
+
+        return `
+          <a class="feature-card ${tone}" href="${folder.path}">
+            <span class="card-icon" aria-hidden="true">${icon}</span>
+            <span class="card-body">
+              <span class="card-title">${folder.name}</span>
+              <span class="card-meta">${detail}</span>
+            </span>
+            <span class="card-arrow" aria-hidden="true">›</span>
+          </a>
+        `;
+      }).join("");
+    }
+
+    renderCards();
+
     searchInput.addEventListener("input", () => {
       renderResults(getMatches(searchInput.value), searchInput.value);
-    });
-
-    document.addEventListener("pointerdown", (event) => {
-      const activeElement = event.target.closest(interactiveSelector);
-      setPressing(activeElement);
-    });
-
-    document.addEventListener("pointerup", (event) => {
-      const activeElement = event.target.closest(interactiveSelector);
-      if (activeElement) {
-        window.setTimeout(() => {
-          if (!activeElement.classList.contains("is-activating")) {
-            activeElement.classList.remove("is-pressing");
-          }
-        }, 80);
-      }
-    });
-
-    document.addEventListener("pointercancel", clearInteractionState);
-    document.addEventListener("pointerleave", (event) => {
-      const activeElement = event.target.closest(interactiveSelector);
-      if (activeElement && !activeElement.classList.contains("is-activating")) {
-        activeElement.classList.remove("is-pressing");
-      }
     });
 
     searchForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const matches = getMatches(searchInput.value);
       if (matches.length > 0) {
-        goAfterAnimation(matches[0].path);
+        window.location.href = matches[0].path;
       }
     });
-
-    document.addEventListener("click", (event) => {
-      const link = event.target.closest(".feature-card, .search-result");
-      if (!link) return;
-
-      event.preventDefault();
-      goAfterAnimation(link.href, link);
-    });
-
-    window.addEventListener("pageshow", clearInteractionState);
   </script>
 </body>
 </html>
