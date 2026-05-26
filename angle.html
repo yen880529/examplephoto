@@ -32,11 +32,11 @@
     <form id="angle-form" class="calculator-form">
       <label>
         圓周 (C)
-        <input id="circumference" type="number" step="any" min="0" placeholder="例如 100" required>
+        <input id="circumference" type="number" inputmode="decimal" step="any" min="0" placeholder="例如 100" required>
       </label>
       <label>
         弧長 (L)
-        <input id="arc-length" type="number" step="any" min="0" placeholder="例如 25" required>
+        <input id="arc-length" type="number" inputmode="decimal" step="any" min="0" placeholder="例如 25" required>
       </label>
     </form>
 
@@ -51,6 +51,8 @@
     const circumferenceInput = document.querySelector('#circumference');
     const arcLengthInput = document.querySelector('#arc-length');
     const resultElement = document.querySelector('#angle-result');
+    const idleClearDelay = 3000;
+    let lastInputAt = 0;
 
     function formatNumber(value) {
       return Number.isFinite(value) ? value.toFixed(4) : value;
@@ -79,8 +81,33 @@
       resultElement.textContent = `${formatNumber(angle)}°`;
     }
 
-    circumferenceInput.addEventListener('input', updateAngleResult);
-    arcLengthInput.addEventListener('input', updateAngleResult);
+    function shouldKeepExistingInput(event) {
+      return event.inputType && (
+        event.inputType.startsWith('delete') ||
+        event.inputType.startsWith('history')
+      );
+    }
+
+    function clearArcLengthAfterIdle(event) {
+      if (!lastInputAt || shouldKeepExistingInput(event)) {
+        return;
+      }
+
+      if (Date.now() - lastInputAt > idleClearDelay && arcLengthInput.value) {
+        arcLengthInput.value = '';
+        updateAngleResult();
+      }
+    }
+
+    function handleInput() {
+      lastInputAt = Date.now();
+      updateAngleResult();
+    }
+
+    circumferenceInput.addEventListener('beforeinput', clearArcLengthAfterIdle);
+    arcLengthInput.addEventListener('beforeinput', clearArcLengthAfterIdle);
+    circumferenceInput.addEventListener('input', handleInput);
+    arcLengthInput.addEventListener('input', handleInput);
   </script>
 </body>
 </html>
