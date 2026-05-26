@@ -81,15 +81,8 @@
       resultElement.textContent = `${formatNumber(angle)}°`;
     }
 
-    function shouldKeepExistingInput(event) {
-      return event.inputType && (
-        event.inputType.startsWith('delete') ||
-        event.inputType.startsWith('history')
-      );
-    }
-
-    function clearArcLengthAfterIdle(event) {
-      if (!lastInputAt || shouldKeepExistingInput(event)) {
+    function clearArcLengthAfterIdle() {
+      if (!lastInputAt) {
         return;
       }
 
@@ -104,8 +97,10 @@
       updateAngleResult();
     }
 
-    circumferenceInput.addEventListener('beforeinput', clearArcLengthAfterIdle);
-    arcLengthInput.addEventListener('beforeinput', clearArcLengthAfterIdle);
+    circumferenceInput.addEventListener('pointerdown', clearArcLengthAfterIdle);
+    arcLengthInput.addEventListener('pointerdown', clearArcLengthAfterIdle);
+    circumferenceInput.addEventListener('focus', clearArcLengthAfterIdle);
+    arcLengthInput.addEventListener('focus', clearArcLengthAfterIdle);
     circumferenceInput.addEventListener('input', handleInput);
     arcLengthInput.addEventListener('input', handleInput);
   </script>
