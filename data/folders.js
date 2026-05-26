@@ -9,5 +9,6 @@ const folders = [
   { name: "SBP / 上端放樣", path: "SBP/上端放樣/", detail: "細部資料夾" },
   { name: "SBP / 下端放樣", path: "SBP/下端放樣/", detail: "細部資料夾" },
   { name: "其他", path: "其他/", detail: "主要資料夾" },
-  { name: "其他 / 信件格式", path: "其他/信件格式/", detail: "細部資料夾" }
+  { name: "其他 / 信件格式", path: "其他/信件格式/", detail: "細部資料夾" },
+  { name: "角度計算器", path: "angle.html", detail: "圓弧角度計算" }
 ];

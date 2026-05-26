@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>圓弧角度計算器</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <p class="eyebrow">角度計算</p>
+        <h1>圓弧角度計算器</h1>
+        <p class="intro">輸入圓周和弧長，系統會依公式 <strong>(弧長 / 圓周) × 360</strong> 計算角度。</p>
+      </div>
+      <div class="stat-panel" aria-label="計算器說明">
+        <span class="stat-number">360°</span>
+        <span class="stat-label">滿圈角度</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap page">
+    <section class="section-head">
+      <div>
+        <p class="eyebrow">計算輸入</p>
+        <h2>請填入以下數值</h2>
+      </div>
+    </section>
+
+    <form id="angle-form" class="calculator-form">
+      <label>
+        圓周 (C)
+        <input id="circumference" type="number" step="any" min="0" placeholder="例如 100" required>
+      </label>
+      <label>
+        弧長 (L)
+        <input id="arc-length" type="number" step="any" min="0" placeholder="例如 25" required>
+      </label>
+    </form>
+
+    <section class="result-panel" aria-live="polite">
+      <p id="angle-result">請輸入圓周與弧長，立即顯示角度。</p>
+    </section>
+
+    <p><a href="index.html">← 返回首頁</a></p>
+  </main>
+
+  <script>
+    const circumferenceInput = document.querySelector('#circumference');
+    const arcLengthInput = document.querySelector('#arc-length');
+    const resultElement = document.querySelector('#angle-result');
+
+    function formatNumber(value) {
+      return Number.isFinite(value) ? value.toFixed(4) : value;
+    }
+
+    function updateAngleResult() {
+      const circumference = parseFloat(circumferenceInput.value);
+      const arcLength = parseFloat(arcLengthInput.value);
+
+      if (!circumferenceInput.value || !arcLengthInput.value) {
+        resultElement.textContent = '請輸入圓周與弧長，立即顯示角度。';
+        return;
+      }
+
+      if (!isFinite(circumference) || circumference <= 0) {
+        resultElement.textContent = '請輸入大於 0 的圓周長。';
+        return;
+      }
+
+      if (!isFinite(arcLength) || arcLength < 0) {
+        resultElement.textContent = '請輸入有效的弧長。';
+        return;
+      }
+
+      const angle = (arcLength / circumference) * 360;
+      resultElement.textContent = `計算結果：角度為 ${formatNumber(angle)}°`;
+    }
+
+    circumferenceInput.addEventListener('input', updateAngleResult);
+    arcLengthInput.addEventListener('input', updateAngleResult);
+  </script>
+</body>
+</html>

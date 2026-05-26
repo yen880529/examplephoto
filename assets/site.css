@@ -420,6 +420,73 @@ h2 {
   }
 }
 
+.calculator-form {
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid rgba(220, 228, 238, 0.92);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 16px 30px rgba(31, 48, 78, 0.08);
+}
+
+.calculator-form label {
+  display: grid;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.calculator-form input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+}
+
+.calculator-form input:focus {
+  outline: 3px solid rgba(41, 105, 216, 0.18);
+}
+
+.result-panel {
+  margin-top: 18px;
+  padding: 20px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(220, 228, 238, 0.96);
+  box-shadow: 0 12px 24px rgba(31, 48, 78, 0.08);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+@media (max-width: 700px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-inner > div {
+    min-width: 0;
+  }
+
+  .hero-inner .stat-panel {
+    width: 100%;
+  }
+
+  .calculator-form {
+    padding: 18px;
+  }
+
+  .page {
+    padding-block: 18px 26px;
+  }
+}
+
+}
+
 @media (max-width: 520px) {
   .hero-inner {
     grid-template-columns: 1fr;
