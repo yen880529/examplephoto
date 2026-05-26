@@ -41,7 +41,7 @@
     </form>
 
     <section class="result-panel" aria-live="polite">
-      <p id="angle-result">請輸入圓周與弧長，立即顯示角度。</p>
+      <p id="angle-result">0.0000°</p>
     </section>
 
     <p><a href="index.html">← 返回首頁</a></p>
@@ -61,22 +61,22 @@
       const arcLength = parseFloat(arcLengthInput.value);
 
       if (!circumferenceInput.value || !arcLengthInput.value) {
-        resultElement.textContent = '請輸入圓周與弧長，立即顯示角度。';
+        resultElement.textContent = '0.0000°';
         return;
       }
 
       if (!isFinite(circumference) || circumference <= 0) {
-        resultElement.textContent = '請輸入大於 0 的圓周長。';
+        resultElement.textContent = '0.0000°';
         return;
       }
 
       if (!isFinite(arcLength) || arcLength < 0) {
-        resultElement.textContent = '請輸入有效的弧長。';
+        resultElement.textContent = '0.0000°';
         return;
       }
 
       const angle = (arcLength / circumference) * 360;
-      resultElement.textContent = `計算結果：角度為 ${formatNumber(angle)}°`;
+      resultElement.textContent = `${formatNumber(angle)}°`;
     }
 
     circumferenceInput.addEventListener('input', updateAngleResult);
