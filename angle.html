@@ -51,8 +51,8 @@
     const circumferenceInput = document.querySelector('#circumference');
     const arcLengthInput = document.querySelector('#arc-length');
     const resultElement = document.querySelector('#angle-result');
-    const idleClearDelay = 3000;
-    let lastInputAt = 0;
+    const idleClearDelay = 1500;
+    let idleClearTimer;
 
     function formatNumber(value) {
       return Number.isFinite(value) ? value.toFixed(4) : value;
@@ -81,26 +81,21 @@
       resultElement.textContent = `${formatNumber(angle)}°`;
     }
 
-    function clearArcLengthAfterIdle() {
-      if (!lastInputAt) {
-        return;
-      }
-
-      if (Date.now() - lastInputAt > idleClearDelay && arcLengthInput.value) {
-        arcLengthInput.value = '';
-        updateAngleResult();
-      }
+    function scheduleClearArcLength() {
+      window.clearTimeout(idleClearTimer);
+      idleClearTimer = window.setTimeout(() => {
+        if (arcLengthInput.value) {
+          arcLengthInput.value = '';
+          updateAngleResult();
+        }
+      }, idleClearDelay);
     }
 
     function handleInput() {
-      lastInputAt = Date.now();
       updateAngleResult();
+      scheduleClearArcLength();
     }
 
-    circumferenceInput.addEventListener('pointerdown', clearArcLengthAfterIdle);
-    arcLengthInput.addEventListener('pointerdown', clearArcLengthAfterIdle);
-    circumferenceInput.addEventListener('focus', clearArcLengthAfterIdle);
-    arcLengthInput.addEventListener('focus', clearArcLengthAfterIdle);
     circumferenceInput.addEventListener('input', handleInput);
     arcLengthInput.addEventListener('input', handleInput);
   </script>
